@@ -23,7 +23,7 @@ const getByCategoryId: RequestHandler = CatchAsync(async (req, res) => {
     return;
   }
 
-  const subcategories = subcategoriesService.getSubcategoriesByCategoryId(catId);
+  const subcategories = await subcategoriesService.getSubcategoriesByCategoryId(catId);
 
   if (subcategories.length === 0) {
     res.status(404).json({

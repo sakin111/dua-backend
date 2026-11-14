@@ -1,11 +1,11 @@
 # Dua & Ruqyah API
 
-A Node.js and Express API for browsing dua categories, subcategories, duas, and ruqyah articles. Content is imported from `src/app/db/duaruqyah_content.json` into SQLite.
+A Node.js and Express API for browsing dua categories, subcategories, duas, and ruqyah articles. Content is imported from `src/app/db/duaruqyah_content.json` into libSQL (Turso) or a local SQLite database.
 
 ## Local setup
 
 1. Install dependencies with `npm install`.
-2. Copy `.env.example` to `.env`. Adjust `DB_PATH` if needed.
+2. Copy `.env.example` to `.env`. The default `file:local.db` URL uses a local SQLite file. For Turso, set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN`.
 3. Seed the database and start the development server:
 
    ```sh
@@ -20,10 +20,11 @@ The API listens on port `4000` by default. The seed command can be run again to 
 | Variable | Purpose | Local example |
 | --- | --- | --- |
 | `PORT` | Server port | `4000` |
-| `DB_PATH` | SQLite database file path | `src/app/db/dua_main.sqlite` |
+| `TURSO_DATABASE_URL` | Turso URL or local SQLite URL | `file:local.db` |
+| `TURSO_AUTH_TOKEN` | Authentication token for a remote Turso database | Not required locally |
 | `FRONTEND_URL` | Allowed frontend origin for CORS | `http://localhost:3000` |
 
-Do not commit `.env`, secrets, or a production SQLite database to GitHub.
+Do not commit `.env`, database files, or secrets to GitHub.
 
 ## API
 
@@ -55,11 +56,8 @@ Create a **Web Service** connected to the GitHub repository, then set:
 
 - **Build command:** `npm install && npm run build`
 - **Start command:** `node dist/app/db/seed.js && npm start`
-- **Environment variable:** `DB_PATH=/var/data/dua_main.sqlite`
+- **Environment variable:** `TURSO_DATABASE_URL` to your Turso database URL
+- **Environment variable:** `TURSO_AUTH_TOKEN` to your Turso auth token
 - **Environment variable:** `FRONTEND_URL=https://your-frontend-domain`
 
-Render supplies `PORT` automatically. Add a persistent disk mounted at `/var/data` to keep the SQLite database across deploys and restarts. Persistent disks require a paid web service. Render disks are not available during build or pre-deploy commands, so the start command seeds the database at runtime. The seed updates imported records each time the service starts.
-
-For a read-only deployment without a persistent disk, set `DB_PATH=/tmp/dua_main.sqlite` instead. The startup seed recreates the database after restarts, but any database changes are lost.
-
-See Render's [persistent disk documentation](https://render.com/docs/disks) for disk details.
+Render supplies `PORT` automatically. The start command imports content into Turso before starting the API. The import is safe to rerun when the service restarts.

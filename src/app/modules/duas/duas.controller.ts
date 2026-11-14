@@ -23,7 +23,7 @@ const getBySubcategoryId: RequestHandler = CatchAsync(async (req, res) => {
     return;
   }
 
-  const duas = duasService.getDuasBySubcategoryId(subId);
+  const duas = await duasService.getDuasBySubcategoryId(subId);
 
   if (duas.length === 0) {
     res.status(404).json({
@@ -53,7 +53,7 @@ const getByCategoryId: RequestHandler = CatchAsync(async (req, res) => {
     return;
   }
 
-  const duas = duasService.getDuasByCategoryId(catId);
+  const duas = await duasService.getDuasByCategoryId(catId);
 
   if (duas.length === 0) {
     res.status(404).json({
