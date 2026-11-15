@@ -1,3 +1,8 @@
+# Live Link 
+
+https://dua-backend-2g9o.onrender.com
+
+
 # Dua & Ruqyah API
 
 A Node.js and Express API for browsing dua categories, subcategories, duas, and ruqyah articles. Content is imported from `src/app/db/duaruqyah_content.json` into libSQL (Turso) or a local SQLite database.
